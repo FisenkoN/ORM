@@ -8,6 +8,8 @@ namespace ORM.Models
 {
     public interface ITable
     {
+        public int Id { get; set; }
+
         public string TableName { get; set; }
 
         public int RowsCount { get; set; }

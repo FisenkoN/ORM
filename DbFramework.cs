@@ -24,7 +24,6 @@ namespace ORM
             Tables = new Tables();
         }
 
-
         public void Open()
         {
             connection.Open();
@@ -161,6 +160,21 @@ namespace ORM
             Close();
         }
 
+        public void AddTable(string sqlCommand)
+        {
+            Open();
+
+            SqlCommand command = new SqlCommand();
+
+            command.CommandText = sqlCommand;
+
+            command.Connection = connection;
+
+            command.ExecuteNonQuery();
+
+            Close();
+        }
+
         public void DeleteTable(string name)
         {
             Open();
@@ -176,16 +190,16 @@ namespace ORM
             Close();
         }
 
-        public ICollection<Table> GetAll()
+        public ICollection<ITable> GetAllDataFromTable(string tableName, Type type)
         {
             Open();
 
             SqlCommand command = new SqlCommand();
-            command.CommandText = "SELECT * FROM Table_1";
+            command.CommandText = "SELECT * FROM " + tableName;
             command.Connection = connection;
 
             SqlDataReader reader = command.ExecuteReader();
-            var tables = new List<Table>();
+            var tables = new List<ITable>();
             if (reader.HasRows) // если есть данные
             {
                 // выводим названия столбцов
@@ -193,11 +207,14 @@ namespace ORM
                
                 while (reader.Read()) // построчно считываем данные
                 {
-                    
-                    object id = reader.GetValue(0);
-                    object name = reader.GetValue(1);
-                    var table = new Table_1 { Id = (int)id, Name = name.ToString() };
-                    tables.Add(table);
+                    var u =  type.GetType().DeclaringType;
+
+                    var objs = new List<object>();
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        objs.Add(reader.GetValue(i));
+                    }
+                    tables.Add(new Table_1(objs));
                     //Console.WriteLine("{0} \t{1}", id, name);
                 }
             }

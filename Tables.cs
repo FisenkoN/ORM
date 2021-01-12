@@ -22,7 +22,7 @@ namespace ORM
             return List;
         }
 
-        public void Delete(Table table)
+        public void Delete(ITable table)
         {
             List.Remove(table);
         }

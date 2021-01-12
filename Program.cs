@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ORM.Models;
+using System;
 using System.Collections.Generic;
 
 namespace ORM
@@ -46,6 +47,14 @@ namespace ORM
 
             ////Work
             //db.DeleteTable("Person139");
+
+            var list = db.GetAllDataFromTable(typeof(Table_1).Name, typeof(Table_1));
+
+            foreach (Table_1 item in list)
+            {
+                Console.WriteLine(item.Name);
+            }
+            
         }
     }
 }
